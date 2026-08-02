@@ -668,7 +668,7 @@ h1, h2 {
 .layer-bottom {
   height: 55px;
   width: 100%;
-  background: linear-gradient(135deg, #ff75ad, #d92672);
+  background: linear-gradient(135deg, #ff75ad, #e467d1);
   margin-top: -6px;
   border-radius: 18px 18px 24px 24px;
 }
