@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ff75ad" />
+  <meta name="description" content="A magical, interactive, and luxurious birthday surprise website dedicated to Naincy with archery minigame, interactive cake, polaroid memories, and secret gift box." />
+  <title>Happy Birthday Naincy — A Magical Birthday Surprise ✨</title>
+
+  <!-- Google Fonts with display=swap for instant rendering -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#celebrationTitle">Skip to Naincy's birthday surprise</a>
+
+  <!-- Audio element with preload none for lightning-fast page loading -->
+  <audio id="birthdayMusic" src="XmewgMToaDtGIrf5gYUeFuF6gjLVA_XCmbavAb3Pr6o.mp3" preload="none" loop></audio>
+
+  <div id="app" aria-live="polite">
+    <!-- Background Canvases -->
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <canvas id="cursorCanvas" aria-hidden="true"></canvas>
+
+    <!-- SCENE 1: ARCHERY GAME -->
+    <section id="gameScene" class="scene scene-game is-active" aria-labelledby="gameTitle">
+      <div class="aurora" aria-hidden="true"></div>
+      
+      <header class="hero-copy glass-card">
+        <span class="badge">A Magical Surprise For Naincy</span>
+        <h1 id="gameTitle">Happy Birthday <span class="name-highlight">Naincy</span></h1>
+        <p class="subtitle">Pull the golden bow & shoot the heart to unlock your surprise ✨</p>
+      </header>
+
+      <!-- 💝 Realistic 3D Heart Target with Ribbon -->
+      <div id="heartTarget" class="heart-target" role="img" aria-label="Glowing 3D heart target for Naincy">
+        <div class="heart-pulse-bg"></div>
+        
+        <svg class="heart-svg" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <linearGradient id="heartGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ff7aa9" />
+              <stop offset="30%" stop-color="#ff2a75" />
+              <stop offset="75%" stop-color="#d9004c" />
+              <stop offset="100%" stop-color="#8a0030" />
+            </linearGradient>
+            <linearGradient id="ribbonGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffe082" />
+              <stop offset="50%" stop-color="#ffd36f" />
+              <stop offset="100%" stop-color="#ffb300" />
+            </linearGradient>
+            <filter id="heartGlowFilter" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#ff1a66" flood-opacity="0.65" />
+            </filter>
+          </defs>
+
+          <!-- 3D Heart Base Path -->
+          <path class="heart-shape" d="M 50,88 C 20,68 4,48 4,30 C 4,14 16,4 32,4 C 42,4 47,10 50,15 C 53,10 58,4 68,4 C 84,4 96,14 96,30 C 96,48 80,68 50,88 Z" fill="url(#heartGradient)" filter="url(#heartGlowFilter)" />
+
+          <!-- Glossy 3D Top Highlight -->
+          <path d="M 32,8 C 20,8 10,16 10,28 C 10,34 14,40 18,44 C 14,38 12,30 14,24 C 16,14 24,10 32,8 Z" fill="rgba(255,255,255,0.45)" />
+
+          <!-- 💝 Golden Ribbon / Sash across Heart -->
+          <path class="heart-ribbon" d="M 10,52 Q 50,38 90,52 L 88,62 Q 50,48 12,62 Z" fill="url(#ribbonGrad)" />
+          
+          <!-- Ribbon Bow Knot -->
+          <circle cx="50" cy="48" r="5" fill="#ffe082" />
+          <path d="M 45,48 Q 38,42 43,38 Q 48,44 46,48 Z M 55,48 Q 62,42 57,38 Q 52,44 54,48 Z" fill="#ffd36f" />
+        </svg>
+
+        <div class="heart-ring ring-1"></div>
+        <div class="heart-ring ring-2"></div>
+        <div class="target-name">NAINCY</div>
+      </div>
+
+      <div id="bowStage" class="bow-stage" aria-label="Bow and arrow mini game">
+        <svg id="bowSvg" viewBox="0 0 260 280" width="260" height="280">
+
+    <defs>
+        <!-- Rainbow Bow -->
+        <linearGradient id="bowWood" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff4d88"/>
+            <stop offset="35%" stop-color="#ffcf5c"/>
+            <stop offset="70%" stop-color="#ff7ab8"/>
+            <stop offset="100%" stop-color="#d81b60"/>
+        </linearGradient>
+
+        <!-- Glow -->
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8"
+                flood-color="#ff4d88"
+                flood-opacity=".8"/>
+        </filter>
+    </defs>
+
+    <!-- Left Bow -->
+    <path id="leftBow"
+        d="M90 20 C25 75 25 205 90 260"
+        fill="none"
+        stroke="url(#bowWood)"
+        stroke-width="12"
+        stroke-linecap="round"
+        filter="url(#glow)"
+    />
+
+    <!-- Highlight -->
+    <path
+        d="M95 40 C55 85 55 195 95 240"
+        fill="none"
+        stroke="#ffffff80"
+        stroke-width="2"
+    />
+
+    <!-- String -->
+    <path id="bowString"
+        d="M90 20 Q90 140 90 260"
+        fill="none"
+        stroke="white"
+        stroke-width="2.5"
+    />
+
+    <!-- Grip -->
+    <circle
+        cx="90"
+        cy="140"
+        r="13"
+        fill="#663300"
+        stroke="#ffffff"
+        stroke-width="2"
+    />
+
+</svg>
+
+        <button id="arrow" class="arrow" type="button" aria-label="Drag backward and release to shoot arrow at Naincy's heart target">
+          <span class="arrow-shaft"></span>
+          <span class="arrow-head"></span>
+          <span class="arrow-feathers"><i></i><i></i><i></i></span>
+        </button>
+        <div id="aimGuide" class="aim-guide" aria-hidden="true"></div>
+        <p id="gameHint" class="game-hint">Drag arrow backward & release 🏹✨</p>
+      </div>
+    </section>
+
+    <!-- SCENE 2: GRAND CELEBRATION WORLD -->
+    <section id="celebrationScene" class="scene scene-celebration" aria-labelledby="celebrationTitle" aria-hidden="true">
+      <div class="celebration-bg" aria-hidden="true"></div>
+
+      <!-- Celebration Header -->
+      <header class="celebration-intro glass-card">
+        <span class="badge spark-badge">✨ Queen of the Day ✨</span>
+        <h2 id="celebrationTitle">Happy Birthday, <span class="name-glow">Naincy</span></h2>
+        <p class="subtitle">Welcome to your magical birthday world ❤️</p>
+      </header>
+
+      <!-- Navigation Tabs -->
+      <nav class="celebration-nav glass-card" aria-label="Surprise categories">
+        <button class="tab-btn active" data-tab="cakeTab" type="button">🎂 Make a Wish</button>
+        <button class="tab-btn" data-tab="memoriesTab" type="button">📸 Memories</button>
+        <button class="tab-btn" data-tab="letterTab" type="button">✉️ Secret Letter</button>
+        <button class="tab-btn" data-tab="giftTab" type="button">🎁 Surprise Box</button>
+      </nav>
+
+      <!-- Tab Content Area -->
+      <div class="tab-viewport">
+
+        <!-- TAB 1: INTERACTIVE CAKE & CANDLES -->
+        <article id="cakeTab" class="tab-content active glass-card">
+          <div class="cake-stage">
+            <div class="cake-title">
+              <h3>Happy Birthday, Naincy! 🎂</h3>
+              <p>Click or tap the candles (or blow into your mic) to extinguish them & trigger a surprise!</p>
+            </div>
+
+            <!-- Interactive Cake SVG / HTML -->
+            <div id="cakeContainer" class="cake-container">
+              <div class="candles-row">
+                <div class="candle" data-candle="1">
+                  <div class="flame"></div>
+                  <div class="smoke"></div>
+                  <div class="stick"></div>
+                </div>
+                <div class="candle" data-candle="2">
+                  <div class="flame"></div>
+                  <div class="smoke"></div>
+                  <div class="stick"></div>
+                </div>
+                <div class="candle" data-candle="3">
+                  <div class="flame"></div>
+                  <div class="smoke"></div>
+                  <div class="stick"></div>
+                </div>
+                <div class="candle" data-candle="4">
+                  <div class="flame"></div>
+                  <div class="smoke"></div>
+                  <div class="stick"></div>
+                </div>
+                <div class="candle" data-candle="5">
+                  <div class="flame"></div>
+                  <div class="smoke"></div>
+                  <div class="stick"></div>
+                </div>
+              </div>
+
+              <div class="cake-body">
+                <div class="cake-top-frosting">
+                  <span class="berry">🍓</span>
+                  <span class="berry">🍓</span>
+                  <span class="berry">🍓</span>
+                  <span class="berry">🍓</span>
+                  <span class="berry">🍓</span>
+                </div>
+                <div class="cake-layer layer-top">
+                  <div class="icing-drips"></div>
+                  <span class="cake-text">NAINCY</span>
+                </div>
+                <div class="cake-layer layer-middle"></div>
+                <div class="cake-layer layer-bottom"></div>
+                <div class="cake-stand"></div>
+              </div>
+            </div>
+
+            <button id="blowCandlesBtn" class="primary-action-btn" type="button">
+              <span>✨ Blow All Candles</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- TAB 2: POLAROID MEMORY GALLERY -->
+        <article id="memoriesTab" class="tab-content glass-card">
+          <div class="gallery-header">
+            <h3>Special Memories of Naincy 📸</h3>
+            <p>Hover or tilt to explore cards • You can also upload custom photos!</p>
+            <label class="upload-btn">
+              ➕ Add Custom Photo
+              <input type="file" id="photoUploader" accept="image/*" multiple hidden>
+            </label>
+          </div>
+
+          <div id="polaroidGrid" class="polaroid-grid">
+            <div class="polaroid-card" style="--rot: -3deg;">
+              <div class="pin">📌</div>
+              <div class="polaroid-img-wrapper">
+                <img class="polaroid-img" src="\images\photo1.jpg" alt="Sweet Memory 1" />
+              </div>
+              <div class="polaroid-caption">Your Radiant Smile 😊✨</div>
+            </div>
+
+            <div class="polaroid-card" style="--rot: 2deg;">
+              <div class="pin">📌</div>
+              <div class="polaroid-img-wrapper">
+                <img class="polaroid-img" src="\images\photo2.jpeg" alt="Sweet Memory 2" />
+              </div>
+              <div class="polaroid-caption">Pure Gold Heart 🌟</div>
+            </div>
+
+            <div class="polaroid-card" style="--rot: -2deg;">
+              <div class="pin">📌</div>
+              <div class="polaroid-img-wrapper">
+                <img class="polaroid-img" src="\images\photo3.jpeg" alt="Beautiful Dreams" />
+              </div>
+              <div class="polaroid-caption">Beautiful Dreams 🌺</div>
+            </div>
+
+            <div class="polaroid-card" style="--rot: 4deg;">
+              <div class="pin">📌</div>
+              <div class="polaroid-img-wrapper">
+                <img class="polaroid-img" src="\images\photo4.jpeg" alt="Birthday Happiness" />
+              </div>
+              <div class="polaroid-caption">Birthday Happiness 🎉</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- TAB 3: WAX-SEALED SECRET LETTER -->
+        <article id="letterTab" class="tab-content glass-card">
+          <div class="envelope-wrapper">
+            <div id="envelope" class="envelope">
+              <div class="envelope-back"></div>
+              <div class="letter-paper">
+                <div class="letter-content">
+                  <header class="letter-head">
+                    <span class="date-stamp">August 19, 2026</span>
+                    <h4>Dearest Naincy,</h4>
+                  </header>
+                  <p>On this magnificent day, I want to take a moment to celebrate the wonderful person you are. Your presence brightens every room, your kindness inspires everyone, and your laughter is pure joy.</p>
+                  <p>May this year bring you endless happiness, unforgettable adventures, love, and all the success you truly deserve in life.</p>
+                  <p>Happy Birthday, my dear Naincy! 🎉</p>
+                  <p class="letter-closing">With heartfelt love & best wishes,</p>
+                  <span class="letter-signature">Always & Forever ❤️</span>
+                </div>
+              </div>
+              <div class="envelope-front"></div>
+              <div class="envelope-top"></div>
+              <div id="waxSeal" class="wax-seal" title="Click to open Naincy's Secret Birthday Letter">
+                <span>N</span>
+              </div>
+            </div>
+            <p class="envelope-hint">Click the <strong>N</strong> wax seal to open Naincy's letter ✉️</p>
+          </div>
+        </article>
+
+        <!-- TAB 4: SURPRISE GIFT BOX -->
+        <article id="giftTab" class="tab-content glass-card">
+          <div class="gift-stage">
+            <h3>A Special Gift Box for Naincy 🎁</h3>
+            <p>Tap the glowing box to unwrap your birthday surprise!</p>
+
+            <div id="giftBox" class="gift-box">
+              <div class="gift-lid">
+                <div class="gift-bow"></div>
+              </div>
+              <div class="gift-body">
+                <div class="gift-ribbon-v"></div>
+                <div class="gift-ribbon-h"></div>
+              </div>
+            </div>
+
+            <div id="giftSurpriseContent" class="gift-surprise-content hidden">
+              <div class="gift-reveal-card glass-card">
+                <span class="reveal-icon">👑</span>
+                <h4>Happy Birthday Queen Naincy!</h4>
+                <p>You deserve all the sweetness, love, joy and magic in the universe today!</p>
+                <div class="gift-badges">
+                  <span>✨ 100% Happiness Guaranteed</span>
+                  <span>💖 Endless Love</span>
+                  <span>⭐ Infinite Joy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- FLASH OVERLAY FOR IMPACT -->
+    <div id="flash" class="flash" aria-hidden="true"></div>
+
+    <!-- CONTROL DOCK -->
+    <aside class="control-dock glass-card" aria-label="Birthday website controls">
+      <button id="playPauseBtn" type="button" title="Play / Pause Music" aria-label="Play music">▶</button>
+      <button id="sfxToggleBtn" type="button" title="Toggle Sound FX" aria-label="Toggle sound effects">🔔</button>
+      <button id="muteBtn" type="button" title="Mute Music" aria-label="Mute music">🔊</button>
+      
+      <label class="volume-label" aria-label="Music volume">
+        <span>Vol</span>
+        <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.55" />
+      </label>
+
+      <button id="replayBtn" type="button" title="Replay Celebration" aria-label="Replay celebration animation">Replay</button>
+      <button id="restartBtn" type="button" title="Restart Archery Game" aria-label="Restart bow and arrow game">Restart</button>
+      <button id="fullscreenBtn" type="button" title="Toggle Fullscreen" aria-label="Toggle fullscreen">⛶</button>
+    </aside>
+  </div>
+
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Application Logic -->
+  <script src="script.js"></script>
+
+<!-- Floating Instagram -->
+<a href="https://www.instagram.com/__ankit._.op_/" target="_blank" class="floating-contact-betu" rel="noopener noreferrer">
+  <i class="fab fa-instagram"></i>
+  <span>Betu ❤️</span>
+</a>
+
+<a href="https://www.instagram.com/naincy__raman_/" target="_blank" class="floating-contact-babe" rel="noopener noreferrer">
+  <i class="fab fa-instagram"></i>
+  <span>Babe 💕</span>
+</a>
+
+
+</body>
+</html>

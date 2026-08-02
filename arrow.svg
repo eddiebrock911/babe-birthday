@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 46" role="img" aria-label="Decorative arrow">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#fff0f7"/><stop offset="1" stop-color="#ff4d94"/></linearGradient></defs>
+  <path d="M18 20h286" stroke="url(#g)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M306 5l46 18-46 18 13-18z" fill="#ff4d94"/>
+  <path d="M45 4 4 23l41 19 27-19z" fill="#ffd1e5"/><path d="M45 4 72 23 45 42" fill="#ff78ad" opacity=".9"/>
+</svg>
