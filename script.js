@@ -690,11 +690,11 @@ const wishName = $('#wishName');
 const wishText = $('#wishText');
 const wishList = $('#wishList');
 const wishStatus = $('#wishStatus');
-const WISH_STORAGE_KEY = 'naincy-birthday-wishes-v1';
-function getWishes() { try { return JSON.parse(localStorage.getItem(WISH_STORAGE_KEY)) || []; } catch { return []; } }
-function renderWishes() {
+const wishesRef = window.birthdayWishesDb?.ref('birthdayWishes') || null;
+
+function renderWishes(wishes) {
   wishList.replaceChildren();
-  getWishes().slice(0, 12).forEach(wish => {
+  wishes.slice(0, 30).forEach(wish => {
     const card = document.createElement('article');
     card.className = 'saved-wish';
     const author = document.createElement('strong');
@@ -703,18 +703,52 @@ function renderWishes() {
     wishList.appendChild(card);
   });
 }
-wishForm.addEventListener('submit', event => {
+
+// Every connected visitor receives the newest wishes instantly from Firebase.
+if (wishesRef) {
+  wishesRef.orderByChild('createdAt').limitToLast(30).on('value', snapshot => {
+    const wishes = [];
+    snapshot.forEach(child => wishes.push({ id: child.key, ...child.val() }));
+    renderWishes(wishes.reverse());
+    if (!wishStatus.textContent) wishStatus.textContent = 'Live wishes from everyone are loading here 💖';
+  }, error => {
+    console.error('Could not load wishes:', error);
+    wishStatus.textContent = 'Wishes could not load. Please check Firebase Database Rules.';
+  });
+} else {
+  console.error('Firebase is not loaded. Check firebase-config.js and its script order in index.html.');
+  wishStatus.textContent = 'Firebase setup file is missing. Please refresh after adding firebase-config.js.';
+}
+
+wishForm.addEventListener('submit', async event => {
   event.preventDefault();
-  const name = wishName.value.trim();
+  const name = wishName.value.trim().replace(/\s+/g, ' ');
   const text = wishText.value.trim();
   if (!name || !text) return;
-  const wishes = getWishes();
-  wishes.unshift({ name, text, createdAt: Date.now() });
-  localStorage.setItem(WISH_STORAGE_KEY, JSON.stringify(wishes.slice(0, 30)));
-  wishForm.reset(); renderWishes(); soundEngine.playChime();
-  wishStatus.textContent = 'Your lovely wish has been saved! 💖';
+
+  if (!wishesRef) {
+    wishStatus.textContent = 'Firebase is not connected yet. Please check firebase-config.js.';
+    return;
+  }
+  const submitButton = $('button[type="submit"]', wishForm);
+  submitButton.disabled = true;
+  wishStatus.textContent = 'Sending your birthday wish…';
+  try {
+    await wishesRef.push({
+      name: name.slice(0, 35),
+      text: text.slice(0, 280),
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    });
+    wishForm.reset();
+    soundEngine.playChime();
+    wishStatus.textContent = 'Your lovely wish has been shared with Naincy! 💖';
+  } catch (error) {
+    console.error('Could not save wish:', error);
+    wishStatus.textContent = 'Wish could not be sent. Please check Firebase Database Rules.';
+  } finally {
+    submitButton.disabled = false;
+  }
 });
-renderWishes();
 
 const playlist = [
   { title: 'Birthday Song', src: 'XmewgMToaDtGIrf5gYUeFuF6gjLVA_XCmbavAb3Pr6o.mp3' },

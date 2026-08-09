@@ -187,7 +187,7 @@
             <div class="cake-title">
               <h3>Happy Birthday, Naincy! 🎂</h3>
               <p>Make a wish, tap the candles, or use the microphone to blow them out!</p>
-              <div class="cake-name-age"><span>NAINCY</span><strong id="birthdayAge">17</strong></div>
+              <div class="cake-name-age"><span>NAINCY</span><strong id="birthdayAge">21</strong></div>
             </div>
 
             <!-- Interactive Cake SVG / HTML -->
@@ -385,7 +385,7 @@
       <div id="videoPanel" class="video-panel" hidden>
         <!-- Replace this file name with your own MP4 video. -->
         <video id="birthdayVideo" controls playsinline preload="metadata">
-          <source src="images\birthday.mp4" type="video/mp4">
+          <source src="birthday-message.mp4" type="video/mp4">
           Your browser does not support video playback.
         </video>
         <p>Replace <code>birthday-message.mp4</code> with your personal video file.</p>
@@ -418,6 +418,11 @@
   <!-- GSAP Animation Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+  <!-- Firebase Realtime Database (shared birthday wishes) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
   <!-- Application Logic -->
   <script src="script.js"></script>
 
@@ -433,5 +438,5 @@
 </a>
 
 
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a28513b2e874b21e',t:'MTc4NjI2MDg1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a288eaa43cff518d',t:'MTc4NjMwMTExMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
