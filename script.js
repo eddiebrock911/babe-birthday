@@ -606,26 +606,39 @@ const photoUploader = $('#photoUploader');
 const polaroidGrid = $('#polaroidGrid');
 
 photoUploader.addEventListener('change', (e) => {
-  const files = e.target.files;
+  const files = Array.from(e.target.files || []).filter(file => file.type.startsWith('image/'));
   if (!files.length) return;
-  Array.from(files).forEach(file => {
+
+  files.forEach(file => {
     const reader = new FileReader();
     reader.onload = (evt) => {
       const newCard = document.createElement('div');
       newCard.className = 'polaroid-card';
       newCard.style.setProperty('--rot', `${rand(-4, 4)}deg`);
-      newCard.innerHTML = `
-        <div class="pin">📌</div>
-        <div class="polaroid-img-wrapper">
-          <img class="polaroid-img" src="${evt.target.result}" alt="Naincy Memory" />
-        </div>
-        <div class="polaroid-caption">Precious Moment ✨</div>
-      `;
+
+      const pin = document.createElement('div');
+      pin.className = 'pin';
+      pin.textContent = '📌';
+      const imageWrap = document.createElement('div');
+      imageWrap.className = 'polaroid-img-wrapper';
+      const image = document.createElement('img');
+      image.className = 'polaroid-img';
+      image.src = evt.target.result;
+      image.alt = 'Naincy Memory';
+      const caption = document.createElement('div');
+      caption.className = 'polaroid-caption';
+      caption.textContent = 'Precious Moment ✨';
+
+      imageWrap.appendChild(image);
+      newCard.append(pin, imageWrap, caption);
       polaroidGrid.prepend(newCard);
       soundEngine.playPop();
     };
     reader.readAsDataURL(file);
   });
+
+  // Allows the same photo to be selected again after it has been uploaded.
+  e.target.value = '';
 });
 
 /* --------------------------------------------------------------------------
