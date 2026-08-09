@@ -784,15 +784,22 @@ function stopMicrophone() {
 }
 function monitorBlow() {
   const values = new Uint8Array(microphoneAnalyser.fftSize);
+  const BLOW_THRESHOLD = 5; // Lower value: a normal gentle blow is enough.
+  const REQUIRED_FRAMES = 4; // Short burst prevents normal room noise from triggering it.
+
   const check = () => {
     microphoneAnalyser.getByteTimeDomainData(values);
     let total = 0;
     for (const value of values) total += Math.abs(value - 128);
     const volume = total / values.length;
-    // Requiring consecutive loud frames avoids candles turning off from normal room noise.
-    blowPowerFrames = volume > 16 ? blowPowerFrames + 1 : Math.max(0, blowPowerFrames - 1);
-    micStatus.textContent = `Listening… blow strength: ${Math.min(100, Math.round(volume * 4))}%`;
-    if (blowPowerFrames > 7) {
+
+    blowPowerFrames = volume > BLOW_THRESHOLD
+      ? blowPowerFrames + 1
+      : Math.max(0, blowPowerFrames - 1);
+
+    micStatus.textContent = `Listening… blow strength: ${Math.min(100, Math.round(volume * 10))}%`;
+
+    if (blowPowerFrames >= REQUIRED_FRAMES) {
       candles.forEach((c, index) => setTimeout(() => blowCandle(c), index * 120));
       micStatus.textContent = 'Perfect blow! Your wish is on its way ✨';
       stopMicrophone();
