@@ -13,6 +13,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="ribbon-fix.css" />
+  <link rel="stylesheet" href="features.css" />
 
 <link rel="icon" type="images/png" href="images\emoji.png">
 
@@ -184,7 +186,8 @@
           <div class="cake-stage">
             <div class="cake-title">
               <h3>Happy Birthday, Naincy! 🎂</h3>
-              <p>Click or tap the candles (or blow into your mic) to extinguish them & trigger a surprise!</p>
+              <p>Make a wish, tap the candles, or use the microphone to blow them out!</p>
+              <div class="cake-name-age"><span>NAINCY</span><strong id="birthdayAge">17</strong></div>
             </div>
 
             <!-- Interactive Cake SVG / HTML -->
@@ -218,6 +221,7 @@
               </div>
 
               <div class="cake-body">
+                <div class="cake-topper">Happy Birthday<br><strong>Naincy</strong></div>
                 <div class="cake-top-frosting">
                   <span class="berry">🍓</span>
                   <span class="berry">🍓</span>
@@ -235,9 +239,12 @@
               </div>
             </div>
 
-            <button id="blowCandlesBtn" class="primary-action-btn" type="button">
-              <span>✨ Blow All Candles</span>
-            </button>
+            <div class="cake-actions">
+              <button id="blowCandlesBtn" class="primary-action-btn" type="button"><span>✨ Blow All Candles</span></button>
+              <button id="micBlowBtn" class="mic-blow-btn" type="button">🎙️ Blow with Mic</button>
+            </div>
+            <p id="micStatus" class="mic-status" aria-live="polite">Tap the mic button, allow access, then blow gently.</p>
+            <div id="wishGranted" class="wish-granted" aria-live="polite">✨ Wish Granted, Naincy! ✨</div>
           </div>
         </article>
 
@@ -285,6 +292,28 @@
               <div class="polaroid-caption">Birthday Happiness 🎉</div>
             </div>
           </div>
+
+          <section class="memory-extras" aria-label="Birthday extras">
+            <div class="video-message-card">
+              <span class="extra-icon">💌</span>
+              <div>
+                <h4>A Special Video Message</h4>
+                <p>One little message, made especially for Naincy.</p>
+              </div>
+              <button id="openVideoBtn" class="extra-btn" type="button">▶ Play Video</button>
+            </div>
+
+            <form id="wishForm" class="wish-form" autocomplete="off">
+              <h4>Leave Naincy a Birthday Wish ✨</h4>
+              <div class="wish-inputs">
+                <input id="wishName" maxlength="35" required placeholder="Your name" aria-label="Your name">
+                <textarea id="wishText" maxlength="280" required placeholder="Write a sweet birthday wish…" aria-label="Birthday wish"></textarea>
+              </div>
+              <button class="extra-btn" type="submit">Send Wish 💖</button>
+              <p id="wishStatus" class="wish-status" aria-live="polite"></p>
+              <div id="wishList" class="wish-list" aria-live="polite"></div>
+            </form>
+          </section>
         </article>
 
         <!-- TAB 3: WAX-SEALED SECRET LETTER -->
@@ -349,15 +378,32 @@
       </div>
     </section>
 
+    <!-- PHOTO / VIDEO LIGHTBOX -->
+    <div id="mediaLightbox" class="media-lightbox" role="dialog" aria-modal="true" aria-label="Memory preview" hidden>
+      <button id="closeLightboxBtn" class="lightbox-close" type="button" aria-label="Close preview">×</button>
+      <img id="lightboxImage" alt="Memory preview" hidden>
+      <div id="videoPanel" class="video-panel" hidden>
+        <!-- Replace this file name with your own MP4 video. -->
+        <video id="birthdayVideo" controls playsinline preload="metadata">
+          <source src="images\birthday.mp4" type="video/mp4">
+          Your browser does not support video playback.
+        </video>
+        <p>Replace <code>birthday-message.mp4</code> with your personal video file.</p>
+      </div>
+    </div>
+
     <!-- FLASH OVERLAY FOR IMPACT -->
     <div id="flash" class="flash" aria-hidden="true"></div>
 
     <!-- CONTROL DOCK -->
     <aside class="control-dock glass-card" aria-label="Birthday website controls">
+      <button id="prevTrackBtn" type="button" title="Previous song" aria-label="Previous song">⏮</button>
       <button id="playPauseBtn" type="button" title="Play / Pause Music" aria-label="Play music">▶</button>
+      <button id="nextTrackBtn" type="button" title="Next song" aria-label="Next song">⏭</button>
       <button id="sfxToggleBtn" type="button" title="Toggle Sound FX" aria-label="Toggle sound effects">🔔</button>
       <button id="muteBtn" type="button" title="Mute Music" aria-label="Mute music">🔊</button>
       
+      <span id="trackLabel" class="track-label" aria-live="polite">Birthday Song</span>
       <label class="volume-label" aria-label="Music volume">
         <span>Vol</span>
         <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.55" />
@@ -387,5 +433,5 @@
 </a>
 
 
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a28513b2e874b21e',t:'MTc4NjI2MDg1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

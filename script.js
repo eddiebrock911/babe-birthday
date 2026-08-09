@@ -88,6 +88,9 @@ const flash = $('#flash');
 
 const audio = $('#birthdayMusic');
 const playPauseBtn = $('#playPauseBtn');
+const prevTrackBtn = $('#prevTrackBtn');
+const nextTrackBtn = $('#nextTrackBtn');
+const trackLabel = $('#trackLabel');
 const sfxToggleBtn = $('#sfxToggleBtn');
 const muteBtn = $('#muteBtn');
 const volumeSlider = $('#volumeSlider');
@@ -163,6 +166,7 @@ const soundEngine = {
 };
 
 const music = { isPlaying: false, muted: false, volume: 0.55 };
+audio.loop = false; // Playlist advances to the next song instead of looping one track.
 audio.volume = music.volume;
 
 async function playMusic() {
@@ -574,6 +578,7 @@ function checkAllCandles() {
     confettiRain();
     gsap.to('.cake-container', { scale: 1.08, duration: 0.3, yoyo: true, repeat: 1 });
     blowBtn.textContent = '✨ Wish Granted for Naincy! ✨';
+    $('#wishGranted').classList.add('show');
   }
 }
 
@@ -639,6 +644,142 @@ photoUploader.addEventListener('change', (e) => {
 
   // Allows the same photo to be selected again after it has been uploaded.
   e.target.value = '';
+});
+
+/* --------------------------------------------------------------------------
+   PHOTO LIGHTBOX, VIDEO MESSAGE, SAVED WISHES & PLAYLIST
+---------------------------------------------------------------------------- */
+const lightbox = $('#mediaLightbox');
+const lightboxImage = $('#lightboxImage');
+const videoPanel = $('#videoPanel');
+const birthdayVideo = $('#birthdayVideo');
+const closeLightboxBtn = $('#closeLightboxBtn');
+const openVideoBtn = $('#openVideoBtn');
+
+function openLightboxImage(image) {
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = image.alt || 'Memory preview';
+  lightboxImage.hidden = false;
+  videoPanel.hidden = true;
+  lightbox.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function openVideo() {
+  lightboxImage.hidden = true;
+  videoPanel.hidden = false;
+  lightbox.hidden = false;
+  document.body.style.overflow = 'hidden';
+  birthdayVideo.play().catch(() => {});
+}
+function closeLightbox() {
+  lightbox.hidden = true;
+  birthdayVideo.pause();
+  document.body.style.overflow = '';
+}
+polaroidGrid.addEventListener('click', event => {
+  const image = event.target.closest('.polaroid-img');
+  if (image) openLightboxImage(image);
+});
+openVideoBtn.addEventListener('click', openVideo);
+closeLightboxBtn.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
+window.addEventListener('keydown', event => { if (event.key === 'Escape' && !lightbox.hidden) closeLightbox(); });
+
+const wishForm = $('#wishForm');
+const wishName = $('#wishName');
+const wishText = $('#wishText');
+const wishList = $('#wishList');
+const wishStatus = $('#wishStatus');
+const WISH_STORAGE_KEY = 'naincy-birthday-wishes-v1';
+function getWishes() { try { return JSON.parse(localStorage.getItem(WISH_STORAGE_KEY)) || []; } catch { return []; } }
+function renderWishes() {
+  wishList.replaceChildren();
+  getWishes().slice(0, 12).forEach(wish => {
+    const card = document.createElement('article');
+    card.className = 'saved-wish';
+    const author = document.createElement('strong');
+    author.textContent = `${wish.name}: `;
+    card.append(author, document.createTextNode(wish.text));
+    wishList.appendChild(card);
+  });
+}
+wishForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const name = wishName.value.trim();
+  const text = wishText.value.trim();
+  if (!name || !text) return;
+  const wishes = getWishes();
+  wishes.unshift({ name, text, createdAt: Date.now() });
+  localStorage.setItem(WISH_STORAGE_KEY, JSON.stringify(wishes.slice(0, 30)));
+  wishForm.reset(); renderWishes(); soundEngine.playChime();
+  wishStatus.textContent = 'Your lovely wish has been saved! 💖';
+});
+renderWishes();
+
+const playlist = [
+  { title: 'Birthday Song', src: 'XmewgMToaDtGIrf5gYUeFuF6gjLVA_XCmbavAb3Pr6o.mp3' },
+  { title: 'Favorite Song 2', src: 'song-2.mp3' },
+  { title: 'Favorite Song 3', src: 'song-3.mp3' }
+];
+let activeTrack = 0;
+function loadTrack(index, autoplay = music.isPlaying) {
+  activeTrack = (index + playlist.length) % playlist.length;
+  audio.src = playlist[activeTrack].src;
+  trackLabel.textContent = playlist[activeTrack].title;
+  if (autoplay) playMusic();
+}
+prevTrackBtn.addEventListener('click', () => loadTrack(activeTrack - 1));
+nextTrackBtn.addEventListener('click', () => loadTrack(activeTrack + 1));
+audio.addEventListener('ended', () => loadTrack(activeTrack + 1, true));
+loadTrack(0, false);
+
+const micBlowBtn = $('#micBlowBtn');
+const micStatus = $('#micStatus');
+const wishGranted = $('#wishGranted');
+let microphoneStream;
+let microphoneContext;
+let microphoneAnalyser;
+let micFrame;
+let blowPowerFrames = 0;
+function stopMicrophone() {
+  cancelAnimationFrame(micFrame);
+  microphoneStream?.getTracks().forEach(track => track.stop());
+  microphoneStream = null;
+  micBlowBtn.classList.remove('listening');
+  micBlowBtn.textContent = '🎙️ Blow with Mic';
+}
+function monitorBlow() {
+  const values = new Uint8Array(microphoneAnalyser.fftSize);
+  const check = () => {
+    microphoneAnalyser.getByteTimeDomainData(values);
+    let total = 0;
+    for (const value of values) total += Math.abs(value - 128);
+    const volume = total / values.length;
+    // Requiring consecutive loud frames avoids candles turning off from normal room noise.
+    blowPowerFrames = volume > 16 ? blowPowerFrames + 1 : Math.max(0, blowPowerFrames - 1);
+    micStatus.textContent = `Listening… blow strength: ${Math.min(100, Math.round(volume * 4))}%`;
+    if (blowPowerFrames > 7) {
+      candles.forEach((c, index) => setTimeout(() => blowCandle(c), index * 120));
+      micStatus.textContent = 'Perfect blow! Your wish is on its way ✨';
+      stopMicrophone();
+      return;
+    }
+    micFrame = requestAnimationFrame(check);
+  };
+  check();
+}
+micBlowBtn.addEventListener('click', async () => {
+  if (microphoneStream) { stopMicrophone(); micStatus.textContent = 'Microphone paused.'; return; }
+  if (!navigator.mediaDevices?.getUserMedia) { micStatus.textContent = 'Microphone is not supported in this browser.'; return; }
+  try {
+    microphoneStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    microphoneContext = new (window.AudioContext || window.webkitAudioContext)();
+    microphoneAnalyser = microphoneContext.createAnalyser();
+    microphoneAnalyser.fftSize = 1024;
+    microphoneContext.createMediaStreamSource(microphoneStream).connect(microphoneAnalyser);
+    blowPowerFrames = 0; micBlowBtn.classList.add('listening'); micBlowBtn.textContent = '🎙️ Listening…';
+    micStatus.textContent = 'Listening now — blow gently toward the mic!'; monitorBlow();
+  } catch { micStatus.textContent = 'Please allow microphone permission, then try again.'; }
 });
 
 /* --------------------------------------------------------------------------
