@@ -894,8 +894,8 @@ function stopMicrophone() {
 }
 function monitorBlow() {
   const values = new Uint8Array(microphoneAnalyser.fftSize);
-  const BLOW_THRESHOLD = 5; // Lower value: a normal gentle blow is enough.
-  const REQUIRED_FRAMES = 4; // Short burst prevents normal room noise from triggering it.
+  const BLOW_THRESHOLD = 15; // Lower value: a normal gentle blow is enough.
+  const REQUIRED_FRAMES = 5; // Short burst prevents normal room noise from triggering it.
 
   const check = () => {
     microphoneAnalyser.getByteTimeDomainData(values);
