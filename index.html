@@ -13,8 +13,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="ribbon-fix.css" />
-  <link rel="stylesheet" href="features.css" />
 
 <link rel="icon" type="images/png" href="images\emoji.png">
 
@@ -172,7 +170,8 @@
 
       <!-- Navigation Tabs -->
       <nav class="celebration-nav glass-card" aria-label="Surprise categories">
-        <button class="tab-btn active" data-tab="cakeTab" type="button">🎂 Make a Wish</button>
+        <button class="tab-btn active" data-tab="cakeTab" type="button">🎂 Cake & Wish</button>
+        <button class="tab-btn" data-tab="wishesTab" type="button">💌 Wishes Wall</button>
         <button class="tab-btn" data-tab="memoriesTab" type="button">📸 Memories</button>
         <button class="tab-btn" data-tab="letterTab" type="button">✉️ Secret Letter</button>
         <button class="tab-btn" data-tab="giftTab" type="button">🎁 Surprise Box</button>
@@ -248,7 +247,32 @@
           </div>
         </article>
 
-        <!-- TAB 2: POLAROID MEMORY GALLERY -->
+        <!-- TAB 2: BIRTHDAY WISHES WALL -->
+        <article id="wishesTab" class="tab-content glass-card">
+          <div class="wishes-wall-stage">
+            <div class="gallery-header">
+              <h3>Birthday Wishes Wall 💌</h3>
+              <p>Leave a sweet birthday wish for Naincy & see all messages from everyone!</p>
+            </div>
+
+            <form id="wishForm" class="wish-form" autocomplete="off">
+              <h4>Leave Naincy a Birthday Wish ✨</h4>
+              <div class="wish-inputs">
+                <input id="wishName" maxlength="35" required placeholder="Your name (e.g., Ankit)" aria-label="Your name">
+                <textarea id="wishText" maxlength="280" required placeholder="Write a sweet birthday wish for Naincy…" aria-label="Birthday wish"></textarea>
+              </div>
+              <button class="extra-btn" type="submit">Send Wish 💖</button>
+              <p id="wishStatus" class="wish-status" aria-live="polite"></p>
+            </form>
+
+            <div class="wishes-section-title">
+              <h4>Wishes Received for Naincy 💖</h4>
+            </div>
+            <div id="wishList" class="wish-list" aria-live="polite"></div>
+          </div>
+        </article>
+
+        <!-- TAB 3: POLAROID MEMORY GALLERY -->
         <article id="memoriesTab" class="tab-content glass-card">
           <div class="gallery-header">
             <h3>Special Memories of Naincy 📸</h3>
@@ -263,7 +287,7 @@
             <div class="polaroid-card" style="--rot: -3deg;">
               <div class="pin">📌</div>
               <div class="polaroid-img-wrapper">
-                <img class="polaroid-img" src="\images\photo1.jpg" alt="Sweet Memory 1" />
+                <img class="polaroid-img" src="images/photo1.jpg" alt="Sweet Memory 1" />
               </div>
               <div class="polaroid-caption">Your Radiant Smile 😊✨</div>
             </div>
@@ -271,7 +295,7 @@
             <div class="polaroid-card" style="--rot: 2deg;">
               <div class="pin">📌</div>
               <div class="polaroid-img-wrapper">
-                <img class="polaroid-img" src="\images\photo2.jpeg" alt="Sweet Memory 2" />
+                <img class="polaroid-img" src="images/photo2.jpeg" alt="Sweet Memory 2" />
               </div>
               <div class="polaroid-caption">Pure Gold Heart 🌟</div>
             </div>
@@ -279,7 +303,7 @@
             <div class="polaroid-card" style="--rot: -2deg;">
               <div class="pin">📌</div>
               <div class="polaroid-img-wrapper">
-                <img class="polaroid-img" src="\images\photo3.jpeg" alt="Beautiful Dreams" />
+                <img class="polaroid-img" src="images/photo3.jpeg" alt="Beautiful Dreams" />
               </div>
               <div class="polaroid-caption">Beautiful Dreams 🌺</div>
             </div>
@@ -287,7 +311,7 @@
             <div class="polaroid-card" style="--rot: 4deg;">
               <div class="pin">📌</div>
               <div class="polaroid-img-wrapper">
-                <img class="polaroid-img" src="\images\photo4.jpeg" alt="Birthday Happiness" />
+                <img class="polaroid-img" src="images/photo4.jpeg" alt="Birthday Happiness" />
               </div>
               <div class="polaroid-caption">Birthday Happiness 🎉</div>
             </div>
@@ -302,17 +326,6 @@
               </div>
               <button id="openVideoBtn" class="extra-btn" type="button">▶ Play Video</button>
             </div>
-
-            <form id="wishForm" class="wish-form" autocomplete="off">
-              <h4>Leave Naincy a Birthday Wish ✨</h4>
-              <div class="wish-inputs">
-                <input id="wishName" maxlength="35" required placeholder="Your name" aria-label="Your name">
-                <textarea id="wishText" maxlength="280" required placeholder="Write a sweet birthday wish…" aria-label="Birthday wish"></textarea>
-              </div>
-              <button class="extra-btn" type="submit">Send Wish 💖</button>
-              <p id="wishStatus" class="wish-status" aria-live="polite"></p>
-              <div id="wishList" class="wish-list" aria-live="polite"></div>
-            </form>
           </section>
         </article>
 
@@ -383,12 +396,10 @@
       <button id="closeLightboxBtn" class="lightbox-close" type="button" aria-label="Close preview">×</button>
       <img id="lightboxImage" alt="Memory preview" hidden>
       <div id="videoPanel" class="video-panel" hidden>
-        <!-- Replace this file name with your own MP4 video. -->
-        <video id="birthdayVideo" controls playsinline preload="metadata">
-          <source src="birthday-message.mp4" type="video/mp4">
+        <video id="birthdayVideo" controls playsinline preload="auto">
+          <source src="images/Birthday.mp4" type="video/mp4">
           Your browser does not support video playback.
         </video>
-        <p>Replace <code>birthday-message.mp4</code> with your personal video file.</p>
       </div>
     </div>
 
