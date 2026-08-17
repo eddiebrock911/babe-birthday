@@ -656,6 +656,13 @@ const birthdayVideo = $('#birthdayVideo');
 const closeLightboxBtn = $('#closeLightboxBtn');
 const openVideoBtn = $('#openVideoBtn');
 
+// Second lightbox (birthday1.mp4 — Achievement video)
+const lightbox2 = $('#mediaLightbox2');
+const videoPanel2 = $('#videoPanel2');
+const birthdayVideo2 = $('#birthdayVideo2');
+const closeLightboxBtn2 = $('#closeLightboxBtn2');
+const openVideoBtn2 = $('#openVideoBtn2');
+
 function openLightboxImage(image) {
   lightboxImage.src = image.currentSrc || image.src;
   lightboxImage.alt = image.alt || 'Memory preview';
@@ -681,14 +688,33 @@ function closeLightbox() {
   if (birthdayVideo) birthdayVideo.pause();
   document.body.style.overflow = '';
 }
+function openVideo2() {
+  lightbox2.hidden = false;
+  videoPanel2.hidden = false;
+  document.body.style.overflow = 'hidden';
+  pauseMusic();
+  if (birthdayVideo2) {
+    birthdayVideo2.currentTime = 0;
+    birthdayVideo2.load();
+    birthdayVideo2.play().catch(e => console.log('Video2 play error:', e));
+  }
+}
+function closeLightbox2() {
+  lightbox2.hidden = true;
+  if (birthdayVideo2) birthdayVideo2.pause();
+  document.body.style.overflow = '';
+}
 polaroidGrid.addEventListener('click', event => {
   const image = event.target.closest('.polaroid-img');
   if (image) openLightboxImage(image);
 });
 openVideoBtn.addEventListener('click', openVideo);
+openVideoBtn2.addEventListener('click', openVideo2);
 closeLightboxBtn.addEventListener('click', closeLightbox);
+closeLightboxBtn2.addEventListener('click', closeLightbox2);
 lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
-window.addEventListener('keydown', event => { if (event.key === 'Escape' && !lightbox.hidden) closeLightbox(); });
+lightbox2.addEventListener('click', event => { if (event.target === lightbox2) closeLightbox2(); });
+window.addEventListener('keydown', event => { if (event.key === 'Escape') { if (!lightbox.hidden) closeLightbox(); if (!lightbox2.hidden) closeLightbox2(); } });
 
 const wishForm = $('#wishForm');
 const wishName = $('#wishName');
@@ -894,7 +920,7 @@ function stopMicrophone() {
 }
 function monitorBlow() {
   const values = new Uint8Array(microphoneAnalyser.fftSize);
-  const BLOW_THRESHOLD = 13; // Lower value: a normal gentle blow is enough.
+  const BLOW_THRESHOLD = 10; // Lower value: a normal gentle blow is enough.
   const REQUIRED_FRAMES = 4; // Short burst prevents normal room noise from triggering it.
 
   const check = () => {
