@@ -887,9 +887,9 @@ if (wishForm) {
 }
 
 const playlist = [
-  { title: 'Birthday Song', src: 'XmewgMToaDtGIrf5gYUeFuF6gjLVA_XCmbavAb3Pr6o.mp3' },
-  { title: 'Favorite Song 2', src: 'song-2.mp3' },
-  { title: 'Favorite Song 3', src: 'song-3.mp3' }
+  // { title: 'Birthday Song', src: 'XmewgMToaDtGIrf5gYUeFuF6gjLVA_XCmbavAb3Pr6o.mp3' },
+  { title: 'Birthday Song 1', src: 'music/birthday-song.mp3' },
+  { title: 'Favorite Song 2', src: 'music/birthday-song-2.mp3' }
 ];
 let activeTrack = 0;
 function loadTrack(index, autoplay = music.isPlaying) {
